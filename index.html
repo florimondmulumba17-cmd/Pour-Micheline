@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pour Micheline 🌹</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #1a0307;
+  --rose-red: #9e1b32;
+  --rose-bright: #e63946;
+  --rose-petal: #ffccd5;
+  --gold: #f4a261;
+  --gold-glow: #ffd166;
+  --text-light: #fff0f3;
+  --display: 'Playfair Display', Georgia, serif;
+  --body: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg-dark);color:var(--text-light);font-family:var(--body);overflow-x:hidden}
+
+/* Pétales de rose animés */
+.petals-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+.petal {
+  position: absolute;
+  background: linear-gradient(135deg, var(--rose-bright), var(--rose-red));
+  border-radius: 100% 0 100% 0;
+  opacity: 0.7;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+  animation: fall linear infinite, sway ease-in-out infinite alternate;
+}
+@keyframes fall {
+  0% { top: -10%; }
+  100% { top: 110%; }
+}
+@keyframes sway {
+  0% { transform: rotate(0deg) translateX(0); }
+  100% { transform: rotate(180deg) translateX(50px); }
+}
+
+.page {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px 80px;
+}
+.page.active { display: flex; }
+
+/* Typographie & Titres */
+h1 {
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 7vw, 4.5rem);
+  margin: 20px 0;
+  color: var(--rose-petal);
+  text-shadow: 0 0 20px rgba(230, 57, 70, 0.4);
+}
+
+.sub {
+  font-size: 1.2rem;
+  color: var(--rose-petal);
+  opacity: 0.9;
+  margin-bottom: 25px;
+}
+
+/* Animations Photo Page 1 */
+.photo-frame {
+  position: relative;
+  width: clamp(180px, 45vw, 230px);
+  height: clamp(180px, 45vw, 230px);
+  border-radius: 50%;
+  padding: 6px;
+  background: linear-gradient(45deg, var(--gold), var(--rose-bright), var(--gold-glow));
+  background-size: 200% 200%;
+  box-shadow: 0 10px 25px rgba(230, 57, 70, 0.4);
+  animation: float-image 4s ease-in-out infinite, pulse-glow 3s alternate infinite, gradient-shift 6s ease infinite;
+  transition: transform 0.4s ease;
+}
+.photo-frame:hover {
+  transform: scale(1.06) rotate(2deg);
+}
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: transform 0.5s ease;
+}
+.photo-frame:hover img {
+  transform: scale(1.05);
+}
+
+@keyframes float-image {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 15px rgba(230, 57, 70, 0.4); }
+  100% { box-shadow: 0 0 35px rgba(244, 162, 97, 0.8), 0 0 15px rgba(230, 57, 70, 0.6); }
+}
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Boutons */
+.btn {
+  border: none;
+  border-radius: 50px;
+  background: linear-gradient(45deg, var(--rose-red), var(--rose-bright));
+  color: white;
+  font-family: var(--body);
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 16px 36px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
+  transition: all 0.3s ease;
+  margin-top: 15px;
+}
+.btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(230, 57, 70, 0.6);
+}
+
+/* Page 2 - Cartes & Souvenirs */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 850px;
+  margin: 30px 0;
+}
+.card {
+  perspective: 1000px;
+  height: 260px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.card .in {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.card.flipped .in { transform: rotateY(180deg); }
+.face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 20px;
+  backface-visibility: hidden;
+  border: 1px solid rgba(255, 204, 213, 0.2);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+.front {
+  background: rgba(158, 27, 50, 0.3);
+  backdrop-filter: blur(10px);
+  font-family: var(--display);
+  font-size: 1.3rem;
+  color: var(--gold-glow);
+}
+.back {
+  background: linear-gradient(135deg, var(--rose-red), #4a000e);
+  color: var(--text-light);
+  font-size: 1rem;
+  line-height: 1.5;
+  transform: rotateY(180deg);
+  overflow: hidden;
+}
+
+/* Animations Photo Page 2 (T-shirt bleu sur la carte) */
+.card-photo-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+}
+.card-photo-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease, filter 0.5s ease;
+}
+.card.flipped .card-photo-wrapper img {
+  animation: photo-pop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.card-photo-wrapper::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: rotate(30deg) translateY(-100%);
+  transition: transform 0.8s ease;
+}
+.card.flipped .card-photo-wrapper::after {
+  transform: rotate(30deg) translateY(100%);
+  transition-delay: 0.2s;
+}
+
+@keyframes photo-pop {
+  0% { transform: scale(1.2); filter: blur(4px); }
+  100% { transform: scale(1); filter: blur(0); }
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 15px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--rose-petal);
+  opacity: 0.8;
+  z-index: 10;
+}
+</style>
+</head>
+<body>
+
+<div class="petals-container" id="petals"></div>
+
+<main>
+  <!-- PAGE 1 -->
+  <section id="p1" class="page active">
+    <!-- Photo 1 : Robe verte -->
+    <div class="photo-frame">
+      <img src="img.02.jpeg" alt="Micheline">
+    </div>
+    
+    <h1>
+      Joyeux Anniversaire <br>
+      <span style="color:var(--gold-glow)">Micheline</span>
+    </h1>
+    
+    <p class="sub">Une délicate attention t'attend...</p>
+    <button id="open" class="btn">Découvrir le cadeau 🌹</button>
+  </section>
+
+  <!-- PAGE 2 -->
+  <section id="p2" class="page">
+    <h1 style="font-size:2.5rem;">Mes Vœux Pour Toi</h1>
+    <p class="sub">Touche les cartes pour révéler les surprises</p>
+
+    <div class="cards">
+      <!-- Carte 1 : Vœu d'Agence -->
+      <button class="card">
+        <div class="in">
+          <div class="face front">Ton Avenir </div>
+          <div class="face back">
+            Que tes rêves puissent se réaliser et que tu puisses créer ton agence !
+          </div>
+        </div>
+      </button>
+
+      <!-- Carte 2 : Photo 2 (T-shirt bleu) -->
+      <button class="card">
+        <div class="in">
+          <div class="face front">Un Rayon de Soleil </div>
+          <div class="face back" style="padding:0;">
+            <div class="card-photo-wrapper">
+              <img src="img.01.jpeg" alt="Micheline Photo Bleu">
+            </div>
+          </div>
+        </div>
+      </button>
+
+      <!-- Carte 3 : Message Doux -->
+      <button class="card">
+        <div class="in">
+          <div class="face front">Bonheur & Réussite </div>
+          <div class="face back">
+            Pleine de réussite dans tous tes projets. Que cette année soit florissante !
+          </div>
+        </div>
+      </button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  she was a flower 🌹
+</footer>
+
+<script>
+// Génération des pétales de rose
+const petalsContainer = document.getElementById('petals');
+for (let i = 0; i < 25; i++) {
+  const petal = document.createElement('div');
+  petal.className = 'petal';
+  const size = Math.random() * 15 + 10;
+  petal.style.width = size + 'px';
+  petal.style.height = size * 1.4 + 'px';
+  petal.style.left = Math.random() * 100 + '%';
+  petal.style.animationDuration = (Math.random() * 8 + 6) + 's';
+  petal.style.animationDelay = (Math.random() * 5) + 's';
+  petalsContainer.appendChild(petal);
+}
+
+// Navigation entre pages
+document.getElementById('open').addEventListener('click', () => {
+  document.getElementById('p1').classList.remove('active');
+  document.getElementById('p2').classList.add('active');
+  window.scrollTo(0, 0);
+});
+
+// Animation d'ouverture des cartes
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('click', () => {
+    card.classList.toggle('flipped');
+  });
+});
+</script>
+
+</body>
+</html>
